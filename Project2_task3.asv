@@ -1,0 +1,36 @@
+%% Task 3: 
+rng(100);
+% Matrix Setup
+n = 20;%= 100;
+density = 0.05; 
+% Generate Sparse SPD Matrix A and random side vector b
+A = sprandsym(n, density, 0.1, 1); 
+b = rand(n, 1);
+%disp(A)
+% disp(b)
+
+% Solve using Conjugate Gradient Method
+tol = 1e-10;%1e-6; 
+max_iter = 1000; 
+[x_cg, num_iter, residuals] = conjugate_gradient(A, b, tol, max_iter);
+
+% Solve using MATLAB's direct solver
+x_direct = A \ b;
+disp("Solution using Conjugate Gradient Method:");
+disp(x_cg());%disp(x_cg);
+disp("Number of iterations:");
+disp(num_iter);
+disp("Solution using MATLAB's direct solver:");
+disp(x_direct);
+disp("Norm difference:");
+disp(norm(x_cg - x_direct));
+
+% Plot convergence behavior
+figure;
+semilogy(1:numel(residuals), residuals, '-o', 'LineWidth', 2);
+xlabel('Iteration Number');
+ylabel('Residual Norm (log scale)');
+title('Convergence History of C.G. Method');
+grid on;
+set(gcf, 'PaperPositionMode', 'auto');
+print('Fig1-t3', '-dpdf', '-r300');
